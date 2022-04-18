@@ -2,6 +2,7 @@ const express = require("express");
 const { status } = require("express/lib/response");
 const mongoose = require("mongoose");
 const User = require("./models/userModel");
+const Task = require("./models/taskModel");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
   res.json({ try: "This is the trial" });
 });
 
+// create user
 app.post("/users", (req, res) => {
   const user = new User({
     name: req.body.name,
@@ -40,11 +42,24 @@ app.post("/users", (req, res) => {
     .save()
     .then((user) => {
       console.log(user);
-      res.send(user);
+      res.status(201).send(user);
       //   res.json(user);
     })
     .catch((error) => {
       console.log(error);
       res.status(400).send({ error: error.message });
+    });
+});
+
+// create task
+app.post("/tasks", (req, res) => {
+  const task = new Task(req.body);
+  task
+    .save()
+    .then((task) => {
+      res.status(201).send(task);
+    })
+    .catch((error) => {
+      res.status(400).send(error);
     });
 });
