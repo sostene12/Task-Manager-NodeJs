@@ -51,6 +51,34 @@ app.post("/users", (req, res) => {
     });
 });
 
+// getting all users
+app.get("/users", (req, res) => {
+  User.find()
+    .then((users) => {
+      if (!users) {
+        return res.status(404).send();
+      }
+      res.send(users);
+    })
+    .catch((error) => {
+      res.status(500).send();
+    });
+});
+// getting user by id
+app.get("/users/:id", (req, res) => {
+  const _id = req.params.id;
+  User.findById(_id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send(user);
+    })
+    .catch((error) => {
+      res.status(500).send();
+    });
+});
+
 // create task
 app.post("/tasks", (req, res) => {
   const task = new Task(req.body);
