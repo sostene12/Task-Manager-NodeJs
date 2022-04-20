@@ -60,6 +60,31 @@ app.get("/users/:id", async (req, res) => {
     res.status(500).send();
   }
 });
+// update user
+app.patch("/users/:id", async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ["name", "email", "password", "age"];
+  const isValidOperation = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  if (!isValidOperation) {
+    return res.status(400).send({ error: "Invalid updates!" });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!user) {
+      return res.status(404).send();
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 
 // create task
 app.post("/tasks", async (req, res) => {
@@ -71,33 +96,6 @@ app.post("/tasks", async (req, res) => {
     res.status(500).send();
   }
 });
-// update
-// User.findByIdAndUpdate("625d727b9aa1b961b091c2ea", { age: 15 })
-//   .then((user) => {
-//     console.log(user);
-//     return User.countDocuments({ age: 15 });
-//   })
-//   .then((result) => {
-//     console.log(result);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-
-// const updateAgeAndCount = async (id, age, name) => {
-//   const user = await User.findByIdAndUpdate(id, { age: age, name: name });
-//   const count = await User.countDocuments({ age: age });
-
-//   return { user, count };
-// };
-// updateAgeAndCount("625dbc25a3c278eadf27d435", 23, "pacifique")
-//   .then(({ user, count }) => {
-//     console.log(user);
-//     console.log(count);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
 
 // get all tasks
 app.get("/tasks", async (req, res) => {
@@ -123,29 +121,3 @@ app.get("/tasks/:id", async (req, res) => {
     res.status(500).send(error);
   }
 });
-
-// update
-// Task.findByIdAndDelete("625d7620b9b25978d93b62fd")
-//   .then((task) => {
-//     return Task.countDocuments({ completed: false });
-//   })
-//   .then((completed) => {
-//     console.log(completed);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-
-// const deleteTaskAndCount = async (id, completed) => {
-//   await Task.findByIdAndDelete(id);
-//   const count = await Task.countDocuments({ completed: completed });
-//   return count;
-// };
-
-// deleteTaskAndCount("625dc3dfe0f52ae0bf041f5c", false)
-//   .then((count) => {
-//     console.log(count);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
