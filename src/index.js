@@ -28,3 +28,15 @@ mongoose
 
 app.use("/users", userRoutes);
 app.use("/tasks", tasksRoutes);
+
+const jwt = require("jsonwebtoken");
+
+const myFunction = async () => {
+  const token = jwt.sign({ _id: "sos12345" }, "this is my jwt token", {
+    expiresIn: "2 days",
+  });
+  console.log(token);
+  const match = jwt.verify(token, "this is my jwt token");
+  console.log(match);
+};
+myFunction();
