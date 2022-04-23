@@ -53,6 +53,18 @@ const userSchema = new schema({
   ],
 });
 
+// public data to be sent to the user and what is not going to be sent
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
+// generating token
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id.toString() }, "thisisjsonwebtoken");
@@ -61,7 +73,7 @@ userSchema.methods.generateAuthToken = async function () {
   await user.save();
   return token;
 };
-
+// getting credentilas when logging in
 userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email: email });
   if (!user) {
