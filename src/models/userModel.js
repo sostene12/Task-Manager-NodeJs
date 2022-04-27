@@ -53,6 +53,14 @@ const userSchema = new schema({
   ],
 });
 
+// Relationship
+userSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "owner",
+});
+// userSchema.virtuals
+
 // public data to be sent to the user and what is not going to be sent
 userSchema.methods.toJSON = function () {
   const user = this;
@@ -95,6 +103,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
