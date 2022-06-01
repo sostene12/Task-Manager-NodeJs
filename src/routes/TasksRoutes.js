@@ -18,11 +18,21 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // get all tasks
+// GET /tasks?completed=true
+// GET /tasks?limit=2&skip=10
+// GET /tasks?sortBy=createdAt_asc/desc
 router.get("/", authMiddleware, async (req, res) => {
   const match = {};
+  const sort = {};
   // filtering according to completed
   if (req.query.completed) {
     match.completed = req.query.completed === "true";
+  }
+
+  // sorting
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split(":");
+    sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
   }
 
   try {
@@ -36,6 +46,7 @@ router.get("/", authMiddleware, async (req, res) => {
       options: {
         limit: parseInt(req.query.limit),
         skip: parseInt(req.query.skip),
+        sort,
       },
     });
     res.send(req.user.tasks);
