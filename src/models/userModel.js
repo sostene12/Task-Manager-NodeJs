@@ -61,7 +61,6 @@ userSchema.virtual("tasks", {
   localField: "_id",
   foreignField: "owner",
 });
-// userSchema.virtuals
 
 // public data to be sent to the user and what is not going to be sent
 userSchema.methods.toJSON = function () {

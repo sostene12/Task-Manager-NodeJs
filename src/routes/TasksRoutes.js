@@ -19,12 +19,21 @@ router.post("/", authMiddleware, async (req, res) => {
 
 // get all tasks
 router.get("/", authMiddleware, async (req, res) => {
+  const match = {};
+  if (req.query.completed) {
+    match.completed = req.query.completed === "true";
+  }
+
   try {
-    const tasks = await Task.find({ owner: req.user._id });
-    res.send(tasks);
+    // const tasks = await Task.find({ owner: req.user._id });
+    // res.send(tasks);
     // same as below
-    // await req.user.populate("tasks", []);
-    // res.send(req.user.tasks);
+
+    await req.user.populate({
+      path: "tasks",
+      match,
+    });
+    res.send(req.user.tasks);
   } catch (error) {
     res.send(error);
   }
