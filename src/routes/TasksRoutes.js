@@ -20,6 +20,7 @@ router.post("/", authMiddleware, async (req, res) => {
 // get all tasks
 router.get("/", authMiddleware, async (req, res) => {
   const match = {};
+  // filtering according to completed
   if (req.query.completed) {
     match.completed = req.query.completed === "true";
   }
@@ -32,6 +33,10 @@ router.get("/", authMiddleware, async (req, res) => {
     await req.user.populate({
       path: "tasks",
       match,
+      options: {
+        limit: parseInt(req.query.limit),
+        skip: parseInt(req.query.skip),
+      },
     });
     res.send(req.user.tasks);
   } catch (error) {
