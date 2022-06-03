@@ -31,3 +31,29 @@ app.use(express.json());
 
 app.use("/users", userRoutes);
 app.use("/tasks", tasksRoutes);
+
+// using multer
+const multer = require("multer");
+const upload = multer({
+  dest: "avatars",
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, cb) {
+    // using endsWith
+
+    // if (!file.originalname.endsWith(".pdf")) {
+    //   return cb(new Error("File must be a PDF"));
+    // }
+
+    // using Regx
+    if (!file.originalname.match(/\.(doc|docx|pdf)$/)) {
+      return cb(new Error("File must be doc,docx or pdf"));
+    }
+    cb(undefined, true);
+  },
+});
+
+// app.post("/upload", upload.single("avatar"), (req, res) => {
+//   res.send();
+// });

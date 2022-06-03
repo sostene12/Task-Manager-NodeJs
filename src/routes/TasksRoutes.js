@@ -28,7 +28,7 @@ router.get("/", authMiddleware, async (req, res) => {
   if (req.query.completed) {
     match.completed = req.query.completed === "true";
   }
-
+  console.log(req.query.sortBy);
   // sorting
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(":");
