@@ -1,12 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 const userRoutes = require("./routes/UsersRoutes");
 const tasksRoutes = require("./routes/TasksRoutes");
 
 const app = express();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 mongoose
   .connect(
