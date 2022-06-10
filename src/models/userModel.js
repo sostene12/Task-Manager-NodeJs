@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const Task = require("../models/taskModel");
 
@@ -80,7 +82,7 @@ userSchema.methods.toJSON = function () {
 // generating token
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, "thisisjsonwebtoken");
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.SECRET);
 
   user.tokens = user.tokens.concat({ token: token });
   await user.save();
