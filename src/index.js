@@ -6,12 +6,13 @@ const userRoutes = require("./routes/UsersRoutes");
 const tasksRoutes = require("./routes/TasksRoutes");
 
 const app = express();
+dotenv.config();
 
 const port = process.env.PORT;
 
 mongoose
   .connect(
-    "mongodb+srv://sostene:CaGUc402jkLlf1LJ@cluster0.tvlir.mongodb.net/task-manager-api?retryWrites=true&w=majority",
+    process.env.MONGODB_URL,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -24,7 +25,7 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log(error);
+    console.log({"error":error.message});
   });
 
 // access the incomming json
