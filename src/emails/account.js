@@ -7,7 +7,7 @@ sgMail.setApiKey(process.env.SENDGRIDAPIKEY);
 const sendWelcomeEmail = (name, email) => {
   sgMail.send({
     to: email,
-    from: "mwisemarierose@gmail.com",
+    from:process.env.EMAIL,
     subject: "Thanks for joining in!",
     text: `Welcome to the app, ${name}, Let me know how you get along to the app`,
   });
